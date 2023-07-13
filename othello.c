@@ -45,9 +45,9 @@ int main()
             if (current_player == PLAYER)
             {
                 int x, y;
-                printf("Player's turn (P): y x\n");
+                printf("Player's turn (P): x y\n");
                 printf("Player's turn (P): ");
-                scanf("%d %d", &x, &y);
+                scanf("%d %d", &y, &x);
 
                 if (valid_move(x, y, PLAYER, board))
                 {
