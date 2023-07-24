@@ -12,7 +12,7 @@ unsigned char imgout[2][3][512][512];
 double dtemp[2][3][512][512];
 int itemp[2][3][512][512];
 double filter[15][15];
-int padded_itemp[512 + 14][512 + 14];
+int padded_itemp[512 + 100][512 + 100];
 
 void convert(int n);
 
@@ -146,13 +146,15 @@ int value(int a, int b, int index)
 
 void processing()
 {
+    binarization();
 }
 
 void binarization()
 {
+    mirror_padding(0);
     int x, y, i, j, block, h_block, sum, offset, ave;
     offset = 0;
-    block = 19;
+    block = 25; // <= 51
     h_block = block / 2;
 
     for (y = 0; y < height[0]; y++)
@@ -165,26 +167,26 @@ void binarization()
         }
     }
 
-    for (y = 0; y < height[0]; y++)
+    for (y = 50; y < height[0] + 50; y++)
     {
-        for (x = 0; x < width[0]; x++)
+        for (x = 50; x < width[0] + 50; x++)
         {
             sum = 0;
             for (i = -h_block; i < h_block; i++)
             {
                 for (j = -h_block; j < h_block; j++)
                 {
-                    sum += imgin[0][0][x + j][y + i];
+                    sum += padded_itemp[x + j][y + i];
                 }
             }
 
-            if (imgin[0][0][x][y] < (sum / (block * block) + offset))
+            if (imgin[0][0][x - 50][y - 50] < (sum / (block * block) - offset))
             {
-                imgout[0][0][x][y] = 0;
+                imgout[0][0][x - 50][y - 50] = 0;
             }
             else
             {
-                imgout[0][0][x][y] = 255;
+                imgout[0][0][x - 50][y - 50] = 255;
             }
         }
     }
@@ -338,25 +340,25 @@ void mirror_padding(int index)
     {
         for (x = 0; x < width[index]; x++)
         {
-            padded_itemp[x + 7][y + 7] = imgin[index][0][x][y];
+            padded_itemp[x + 50][y + 50] = imgin[index][0][x][y];
         }
     }
 
-    for (y = 7; y < height[index] + 7; y++)
+    for (y = 50; y < height[index] + 50; y++)
     {
-        for (i = 0; i < 7; i++)
+        for (i = 0; i < 50; i++)
         {
-            padded_itemp[i][y] = padded_itemp[2 * 7 - i][y];                                   // left side
-            padded_itemp[width[index] + 2 * 7 - i - 1][y] = padded_itemp[width[index] + i][y]; // right side
+            padded_itemp[i][y] = padded_itemp[2 * 50 - i][y];                                   // left side
+            padded_itemp[width[index] + 2 * 50 - i - 1][y] = padded_itemp[width[index] + i][y]; // right side
         }
     }
 
-    for (x = 0; x < width[index] + 2 * 7; x++)
+    for (x = 0; x < width[index] + 2 * 50; x++)
     {
-        for (i = 0; i < 7; i++)
+        for (i = 0; i < 50; i++)
         {
-            padded_itemp[x][i] = padded_itemp[x][2 * 7 - i];                                     // top side
-            padded_itemp[x][height[index] + 2 * 7 - i - 1] = padded_itemp[x][height[index] + i]; // bottom side
+            padded_itemp[x][i] = padded_itemp[x][2 * 50 - i];                                     // top side
+            padded_itemp[x][height[index] + 2 * 50 - i - 1] = padded_itemp[x][height[index] + i]; // bottom side
         }
     }
     printf("padding\n");
