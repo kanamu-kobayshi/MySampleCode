@@ -1,10 +1,3 @@
-/*
- * Author: Kanamu Kobayashi
- * Date: 2023/07/13
- * Program: Programming assistant
- * Description: Bracket balance check using a stack.
- */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
