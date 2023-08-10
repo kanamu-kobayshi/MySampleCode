@@ -2,7 +2,7 @@ from database_operations import (insert_user, delete_user, update_user,
                                  get_all_users, get_users_by_condition,
                                  get_users_ordered_by_height, get_limited_users,
                                  get_selected_columns, get_average_height)
-
+'''
 # データを挿入
 # insert_user(name, height, weight)
 insert_user()
@@ -14,7 +14,7 @@ delete_user()
 # データを更新
 # update_user(user_id, name=None, height=None, weight=None)
 update_user()
-
+'''
 #########################################################################
 print("################################")
 
